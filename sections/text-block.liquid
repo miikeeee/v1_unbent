@@ -1,0 +1,76 @@
+{% comment %}
+  Section: Text-Block
+  Zeigt einen frei konfigurierbaren Textbereich mit verschiedenen Stilen und Ausrichtungen.
+{% endcomment %}
+
+<section class="section-text-block">
+  <div class="text-block__container">
+    <div class="text-block__content {{ section.settings.text_style }}" style="text-align: {{ section.settings.alignment }};">
+      {{ section.settings.text }}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .section-text-block {
+    padding: 48px 0;
+    background: linear-gradient(120deg, #f6f6f7 60%, #eef3ff 100%);
+  }
+  .text-block__container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .text-block__content {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #222;
+    transition: color 0.3s;
+  }
+  .text--title {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  .text--subtitle {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  .text--normal {
+    font-size: 1.1rem;
+    font-weight: 400;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Textblock",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Hier steht dein Text."
+    },
+    {
+      "type": "select",
+      "id": "text_style",
+      "label": "Textstil",
+      "options": [
+        { "value": "text--title", "label": "Titel" },
+        { "value": "text--subtitle", "label": "Untertitel" },
+        { "value": "text--normal", "label": "Normal" }
+      ],
+      "default": "text--title"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Ausrichtung",
+      "default": "left"
+    }
+  ],
+  "presets": [
+    { "name": "Textblock" }
+  ]
+}
+{% endschema %}
