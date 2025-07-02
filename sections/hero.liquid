@@ -1,0 +1,83 @@
+{% comment %}
+  Hero Section mit Bild und Text
+{% endcomment %}
+
+<section class="hero-section hero-section--{{ section.settings.image_position }}">
+  <div class="hero-section__container">
+    {% if section.settings.image_position == 'left' %}
+      <div class="hero-section__image">
+        <img src="{{ section.settings.image | img_url: '800x' }}" alt="{{ section.settings.image_alt | escape }}">
+      </div>
+    {% endif %}
+    <div class="hero-section__content">
+      <h1>{{ section.settings.heading }}</h1>
+      <p>{{ section.settings.subtext }}</p>
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="hero-section__button">
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+    </div>
+    {% if section.settings.image_position == 'right' %}
+      <div class="hero-section__image">
+        <img src="{{ section.settings.image | img_url: '800x' }}" alt="{{ section.settings.image_alt | escape }}">
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Bild"
+    },
+    {
+      "type": "text",
+      "id": "image_alt",
+      "label": "Bildbeschreibung (Alt-Text)"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Bildposition",
+      "options": [
+        { "value": "left", "label": "Links" },
+        { "value": "right", "label": "Rechts" }
+      ],
+      "default": "right"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Willkommen im Shop!"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Untertitel",
+      "default": "Hier steht ein kurzer Beschreibungstext."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button-Text",
+      "default": "Jetzt entdecken"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button-Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Section"
+    }
+  ]
+}
+{% endschema %}
