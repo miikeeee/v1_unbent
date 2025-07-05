@@ -1,0 +1,181 @@
+{% comment %}
+  Section: Animated Feature Cards
+  Zeigt drei Feature-Karten mit modernen Hover- und Scroll-Animationen.
+  Jede Karte kann individuell konfiguriert werden (Icon, Titel, Text, Link).
+{% endcomment %}
+
+<section class="animated-features-section">
+  <div class="features__container">
+    {% for block in section.blocks %}
+      <a href="{{ block.settings.link }}" class="feature-card" style="--delay: {{ forloop.index0 | times: 0.1 }}s;" {{ block.shopify_attributes }}>
+        <div class="feature-card__icon">
+          <img src="{{ block.settings.icon | img_url: '100x' }}" alt="" loading="lazy">
+        </div>
+        <div class="feature-card__content">
+          <h3 class="feature-card__title">{{ block.settings.title }}</h3>
+          <p class="feature-card__text">{{ block.settings.text }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+{% stylesheet %}
+  .animated-features-section {
+    padding: 64px 0;
+    background: linear-gradient(120deg, #f8fafc 60%, #e0e7ff 100%);
+    overflow: hidden;
+  }
+  .features__container {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .feature-card {
+    background: #fff;
+    border-radius: 2rem;
+    box-shadow: 0 4px 32px 0 rgba(60, 60, 120, 0.10);
+    padding: 40px 32px 32px 32px;
+    width: 320px;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px) scale(0.96) rotateZ(-2deg);
+    animation: feature-fade-in 0.7s cubic-bezier(.6,.2,.2,1) forwards;
+    animation-delay: var(--delay);
+    transition: box-shadow 0.3s, transform 0.3s;
+    will-change: transform, box-shadow;
+  }
+  .feature-card__icon {
+    width: 72px;
+    height: 72px;
+    margin-bottom: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1 40%, #a5b4fc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 12px 0 rgba(99,102,241,0.10);
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+  .feature-card__icon img {
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 2px 8px #6366f1aa);
+    transition: filter 0.3s;
+  }
+  .feature-card__title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 0.01em;
+    text-align: center;
+  }
+  .feature-card__text {
+    font-size: 1.1rem;
+    color: #444;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .feature-card:hover {
+    box-shadow: 0 8px 40px 0 rgba(99,102,241,0.18);
+    transform: translateY(-8px) scale(1.03) rotateZ(0deg);
+  }
+  .feature-card:hover .feature-card__icon {
+    background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 100%);
+  }
+  .feature-card:hover .feature-card__icon img {
+    filter: drop-shadow(0 4px 16px #6366f1cc) brightness(1.1);
+  }
+  @media screen and (max-width: 900px) {
+    .features__container {
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+    }
+    .feature-card {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+  @keyframes feature-fade-in {
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1) rotateZ(0deg);
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  // Scroll-Animation: Karten erscheinen beim Scrollen
+  document.addEventListener('DOMContentLoaded', () => {
+    const cards = document.querySelectorAll('.feature-card');
+    const reveal = () => {
+      for (const card of cards) {
+        const rect = card.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 60) {
+          card.style.animationPlayState = 'running';
+        }
+      }
+    };
+    reveal();
+    window.addEventListener('scroll', reveal, { passive: true });
+  });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Animated Features",
+  "max_blocks": 3,
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon (SVG oder PNG)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titel",
+          "default": "Feature-Titel"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Beschreibung",
+          "default": "Kurze Beschreibung des Features."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Animated Features",
+      "blocks": [
+        { "type": "feature" },
+        { "type": "feature" },
+        { "type": "feature" }
+      ]
+    }
+  ]
+}
+{% endschema %}
