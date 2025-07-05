@@ -1,0 +1,371 @@
+{% comment %}
+  ====================================================================================
+  SECTION: Animierte Hero Sektion (Einzel-Datei-Version für einfaches Testen)
+  
+  INFO: Diese Version enthält das gesamte CSS und lädt die benötigten
+        JavaScript-Bibliotheken (GSAP) selbst. Für eine finale Implementierung
+        sollte GSAP zentral in theme.liquid geladen werden.
+  ====================================================================================
+{% endcomment %}
+
+<div
+  id="AnimatedHero--{{ section.id }}"
+  class="animated-hero-section"
+  data-section-id="{{ section.id }}"
+  style="--color-text: {{ section.settings.color_text }}; --color-background: {{ section.settings.color_background }};">
+
+  {% if section.settings.background_image != blank %}
+    <div class="animated-hero__media-wrapper">
+      <img
+        class="animated-hero__background-image"
+        src="{{ section.settings.background_image | image_url: width: 2400 }}"
+        loading="lazy"
+        width="{{ section.settings.background_image.width }}"
+        height="{{ section.settings.background_image.height }}"
+        alt="{{ section.settings.background_image.alt | escape }}">
+    </div>
+    <div class="animated-hero__overlay"></div>
+  {% endif %}
+
+  <div class="page-width animated-hero__content-wrapper">
+    <div class="animated-hero__content">
+      {% if section.settings.heading != blank %}
+        <h1 class="animated-hero__heading">
+          <div class="reveal-line"><span>{{ section.settings.heading | escape }}</span></div>
+        </h1>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <div class="animated-hero__subheading">
+          <div class="reveal-line"><span>{{ section.settings.subheading }}</span></div>
+        </div>
+      {% endif %}
+
+      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+        <div class="animated-hero__button-container">
+          <a href="{{ section.settings.button_link }}" class="magnetic-button">
+            <span class="magnetic-button__text">{{ section.settings.button_label | escape }}</span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="custom-cursor"></div>
+</div>
+
+{% comment %}
+  ====================================================================================
+  STYLES: Alle CSS-Regeln sind hier direkt eingebettet.
+  ====================================================================================
+{% endcomment %}
+{% stylesheet %}
+  .animated-hero-section {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 100px 0;
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+
+  .animated-hero__media-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .animated-hero__background-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.1); /* Startskalierung für den Parallax-Effekt */
+  }
+
+  .animated-hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Dunkles Overlay für bessere Lesbarkeit */
+    z-index: 2;
+  }
+
+  .animated-hero__content-wrapper {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+  }
+
+  /* Wichtig für die "Reveal"-Animation */
+  .reveal-line {
+    overflow: hidden;
+    padding: 0.1em 0; /* Verhindert das Abschneiden von Buchstaben */
+  }
+
+  .reveal-line span {
+    display: inline-block;
+    transform: translateY(110%);
+  }
+
+  .animated-hero__heading {
+    font-size: clamp(3rem, 8vw, 6rem); /* Responsive Schriftgröße */
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .animated-hero__subheading {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    max-width: 600px;
+    margin: 20px auto 40px;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+  .animated-hero__subheading p {
+    margin: 0;
+  }
+
+  .animated-hero__button-container {
+    opacity: 0; /* Startet unsichtbar, wird von GSAP animiert */
+  }
+
+  .magnetic-button {
+    display: inline-block;
+    padding: 18px 40px;
+    border: 2px solid var(--color-text);
+    border-radius: 50px;
+    text-decoration: none;
+    color: var(--color-text);
+    background-color: transparent;
+    font-weight: 600;
+    font-size: 1rem;
+    position: relative;
+    will-change: transform; /* Performance-Optimierung */
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .magnetic-button:hover {
+    background-color: var(--color-text);
+    color: var(--color-background);
+  }
+
+  .magnetic-button__text {
+    display: block;
+    will-change: transform; /* Performance-Optimierung */
+  }
+
+  /* Custom Cursor */
+  .custom-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid white;
+    border-radius: 50%;
+    pointer-events: none; /* Wichtig, damit man durchklicken kann */
+    z-index: 9999;
+    mix-blend-mode: difference; /* Cooler Effekt auf verschiedenen Farben */
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease-out, width 0.3s ease, height 0.3s ease;
+    will-change: transform, width, height;
+  }
+
+  .custom-cursor.grow {
+    width: 50px;
+    height: 50px;
+    border-width: 1px;
+  }
+{% endstylesheet %}
+
+
+{% comment %}
+  ====================================================================================
+  SCRIPTS: GSAP wird hier für den einfachen Test direkt geladen.
+  ====================================================================================
+{% endcomment %}
+<!-- GSAP & ScrollTrigger für moderne Animationen -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/ScrollTrigger.min.js" defer></script>
+
+<script>
+  // Wir warten, bis der DOM und die GSAP-Skripte geladen sind.
+  // Ein robusterer Weg, der auch funktioniert, wenn GSAP schon geladen ist.
+  const initAnimatedHero{{ section.id }} = () => {
+    const sectionElement = document.querySelector(`#AnimatedHero--{{ section.id }}`);
+    if (!sectionElement || typeof gsap === 'undefined') {
+      // Wenn GSAP noch nicht da ist, warte kurz und versuche es erneut.
+      setTimeout(() => initAnimatedHero{{ section.id }}(), 100);
+      return;
+    }
+
+    // --- Selektoren ---
+    const background = sectionElement.querySelector('.animated-hero__background-image');
+    const heading = sectionElement.querySelector('.animated-hero__heading .reveal-line span');
+    const subheading = sectionElement.querySelector('.animated-hero__subheading .reveal-line span');
+    const button = sectionElement.querySelector('.magnetic-button');
+    const cursor = sectionElement.querySelector('.custom-cursor');
+    const magneticText = sectionElement.querySelector('.magnetic-button__text');
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // --- 1. Intro-Animation beim Scrollen ---
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionElement,
+        start: "top 80%",
+        toggleActions: "play none none none"
+      }
+    });
+
+    if (heading) {
+      tl.from(heading, { y: "110%", duration: 1.2, ease: "power4.out" });
+    }
+    if (subheading) {
+      tl.from(subheading, { y: "110%", duration: 1.2, ease: "power4.out" }, "-=1.0");
+    }
+    if (button) {
+      tl.from(button.parentElement, { opacity: 0, scale: 0.8, duration: 1, ease: "power4.out" }, "-=1");
+    }
+
+    // --- 2. Maus-Parallax für Hintergrundbild ---
+    if (background) {
+      sectionElement.addEventListener('mousemove', (e) => {
+        const { clientX, clientY } = e;
+        const { width, height } = sectionElement.getBoundingClientRect();
+        const x = (clientX / width) - 0.5;
+        const y = (clientY / height) - 0.5;
+
+        gsap.to(background, {
+          x: -x * 50,
+          y: -y * 30,
+          scale: 1.15,
+          duration: 1.5,
+          ease: "power3.out"
+        });
+      });
+       sectionElement.addEventListener('mouseleave', () => {
+         gsap.to(background, { x: 0, y: 0, scale: 1.1, duration: 1, ease: 'power3.out' });
+      });
+    }
+
+    // --- 3. Magnetischer Button ---
+    if (button) {
+      button.addEventListener('mousemove', (e) => {
+        const { clientX, clientY } = e;
+        const { left, top, width, height } = button.getBoundingClientRect();
+        const x = clientX - (left + width / 2);
+        const y = clientY - (top + height / 2);
+
+        gsap.to(button, { x: x * 0.4, y: y * 0.4, duration: 0.8, ease: 'power3.out' });
+        gsap.to(magneticText, { x: x * 0.2, y: y * 0.2, duration: 0.8, ease: 'power3.out' });
+      });
+
+      button.addEventListener('mouseleave', () => {
+        gsap.to([button, magneticText], { x: 0, y: 0, duration: 1, ease: 'elastic.out(1, 0.3)' });
+      });
+    }
+    
+    // --- 4. Custom Cursor ---
+    if (cursor) {
+      let isVisible = true;
+      let isHovering = false;
+      
+      const onMouseMove = (e) => {
+        if (!isVisible) {
+          gsap.to(cursor, { opacity: 1, duration: 0.3 });
+          isVisible = true;
+        }
+        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.2, ease: 'power3.out' });
+      };
+
+      const onMouseLeave = () => {
+        gsap.to(cursor, { opacity: 0, duration: 0.3 });
+        isVisible = false;
+      };
+      
+      document.body.addEventListener('mousemove', onMouseMove);
+      document.body.addEventListener('mouseleave', onMouseLeave);
+
+      const interactiveElements = document.querySelectorAll('a, button, input[type="submit"], .magnetic-button');
+      interactiveElements.forEach(el => {
+          el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
+          el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
+      });
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAnimatedHero{{ section.id }});
+  } else {
+    initAnimatedHero{{ section.id }}();
+  }
+</script>
+
+{% schema %}
+{
+  "name": "TEST: Animierte Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Hintergrundbild"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Überschrift",
+      "default": "Willkommen in unserem Shop"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Unterüberschrift / Text",
+      "default": "<p>Entdecke einzigartige Produkte, die mit Leidenschaft und Sorgfalt hergestellt werden.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Text",
+      "default": "Jetzt entdecken"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Farbeinstellungen"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Textfarbe",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "color_background",
+      "label": "Hintergrundfarbe (Fallback)",
+      "default": "#121212"
+    }
+  ],
+  "presets": [
+    {
+      "name": "TEST: Animierte Hero"
+    }
+  ]
+}
+{% endschema %}
