@@ -17,12 +17,13 @@
       "type": "animation-test",
       "name": "TEST: Animierte Hero",
       "settings": {
+        "background_image": "shopify://shop_images/Duisburg_SW.jpg",
         "heading": "zztt",
         "subheading": "<p>Entdecke einzigartige Produkte, die mit Leidenschaft und Sorgfalt hergestellt werden.zzzt</p>",
         "button_label": "Jetzt entdecken",
         "button_link": "",
         "color_text": "#FFFFFF",
-        "color_background": "#121212"
+        "color_background": "#a11f1f"
       }
     }
   },
