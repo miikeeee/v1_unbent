@@ -12,9 +12,45 @@
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "animation_test_Y4CHmc": {
+      "type": "animation-test",
+      "name": "TEST: Animierte Hero",
+      "settings": {
+        "background_image": "shopify://shop_images/Duisburg_SW.jpg",
+        "heading": "zztt",
+        "subheading": "<p>Entdecke einzigartige Produkte, die mit Leidenschaft und Sorgfalt hergestellt werden.zzzt</p>",
+        "button_label": "Jetzt entdecken",
+        "button_link": "",
+        "color_text": "#FFFFFF",
+        "color_background": "#a11f1f"
+      }
+    },
+    "hero_7atVwC": {
+      "type": "hero",
+      "name": "Hero Section",
+      "settings": {
+        "image_alt": "",
+        "image_position": "right",
+        "heading": "Willkommen im Shop!",
+        "subtext": "Hier steht ein kurzer Beschreibungstext.",
+        "button_text": "Jetzt entdecken",
+        "button_link": ""
+      }
+    },
+    "collections_UC88GP": {
+      "type": "collections",
+      "name": "t:general.collections_grid",
+      "settings": {
+        "grid_item_width": "collections--full",
+        "grid_gap": 10
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "animation_test_Y4CHmc",
+    "hero_7atVwC",
+    "collections_UC88GP"
   ]
 }
