@@ -12,9 +12,22 @@
     "main": {
       "type": "hello-world",
       "settings": {}
+    },
+    "animation_test_Y4CHmc": {
+      "type": "animation-test",
+      "name": "TEST: Animierte Hero",
+      "settings": {
+        "heading": "zztt",
+        "subheading": "<p>Entdecke einzigartige Produkte, die mit Leidenschaft und Sorgfalt hergestellt werden.zzzt</p>",
+        "button_label": "Jetzt entdecken",
+        "button_link": "",
+        "color_text": "#FFFFFF",
+        "color_background": "#121212"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "animation_test_Y4CHmc"
   ]
 }
